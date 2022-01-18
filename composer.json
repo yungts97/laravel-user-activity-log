@@ -1,0 +1,38 @@
+{
+    "name": "yungts97/laravel-user-activity-log",
+    "description": "This is an elegant package by yungts97 to easily monitor your laravel app user activity.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Yungts97\\LaravelUserActivityLog\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Yungts97\\LaravelUserActivityLog\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Yungts97\\LaravelUserActivityLog\\UserActivityLogServiceProvider"
+            ]
+        }
+    },
+    "authors": [
+        {
+            "name": "Yung Teck Sheng",
+            "email": "yungts@sains.com.my"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require-dev": {
+        "orchestra/testbench": "^6.0"
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    }
+}
