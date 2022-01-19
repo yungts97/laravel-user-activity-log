@@ -15,21 +15,20 @@ class LoginListener
 
     public function handle(Login $event)
     {
-        if (!config('user-activity-log.log_events.on_login', false)) return;
+        if (!config('user-activity-log.events.login', false)) return;
 
-        $user = $event->user;
-        $log_datetime = date('Y-m-d H:i:s');
-
+        // get the request info
         $request_info = [
             'ip'         => $this->request->ip(),
             'user_agent' => $this->request->userAgent()
         ];
 
+        // insert log record
         Log::create([
-            'user_id'       => $user->id,
-            'log_datetime'  => $log_datetime,
+            'user_id'       => $event->user->id,
+            'log_datetime'  => date('Y-m-d H:i:s'),
             'log_type'      => 'login',
-            'request_info'  => json_encode($request_info)
+            'request_info'  => (object)$request_info
         ]);
     }
 }

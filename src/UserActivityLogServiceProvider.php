@@ -16,6 +16,9 @@ class UserActivityLogServiceProvider extends ServiceProvider
         // publishing
         $this->publishes([self::CONFIG_PATH => config_path('user-activity-log.php')], 'config');
         $this->publishes([self::MIGRATION_PATH => database_path('migrations')], 'migrations');
+
+        // load routes
+        $this->loadRoutesFrom(self::ROUTE_PATH . '/api.php');
     }
 
     public function register()

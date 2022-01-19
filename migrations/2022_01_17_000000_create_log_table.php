@@ -21,7 +21,7 @@ class CreateLogTable extends Migration
             $table->string('table_name',50)->nullable();
             $table->string('log_type',50);
             $table->json('request_info');
-            $table->json('data');
+            $table->json('data')->nullable();
         });
     }
 
