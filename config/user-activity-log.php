@@ -1,14 +1,14 @@
 <?php
 return [
-    'middleware'       => ['api', 'auth'],
-    'delete_limit'     => 7, // default 7 days
+    # add your own middleware here
+    'middleware' => ['api', 'auth'],
 
-    
+    # user model
     'model' => [
         'user' => "App\Models\User"
     ],
 
-    # exclude tables for fi
+    # exclude tables for filter option
     'exclude_tables' => [
         'logs',
         'migrations',
