@@ -1,16 +1,39 @@
 {
     "name": "yungts97/laravel-user-activity-log",
-    "description": "This is an elegant package by yungts97 to easily monitor your laravel app user activity.",
+    "description": "A simple laravel package by yungts97 to easily monitor your laravel app user activity.",
     "type": "library",
     "license": "MIT",
+    "keywords": [
+        "laravel",
+        "user",
+        "activity",
+        "log"
+    ],
+    "authors": [
+        {
+            "name": "Yung Teck Sheng",
+            "email": "yungts97@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "orchestra/testbench": "^6.0",
+        "phpunit/phpunit": "^9.5"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
     "autoload": {
         "psr-4": {
-            "Yungts97\\LaravelUserActivityLog\\": "src/"
+            "Yungts97\\LaravelUserActivityLog\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Yungts97\\LaravelUserActivityLog\\Tests\\": "tests/"
+            "Yungts97\\LaravelUserActivityLog\\Tests\\": "tests"
         }
     },
     "extra": {
@@ -19,20 +42,5 @@
                 "Yungts97\\LaravelUserActivityLog\\UserActivityLogServiceProvider"
             ]
         }
-    },
-    "authors": [
-        {
-            "name": "Yung Teck Sheng",
-            "email": "yungts97@gmail.com"
-        }
-    ],
-    "minimum-stability": "dev",
-    "require-dev": {
-        "orchestra/testbench": "^6.0"
-    },
-    "config": {
-        "preferred-install": "dist",
-        "sort-packages": true,
-        "optimize-autoloader": true
     }
 }
