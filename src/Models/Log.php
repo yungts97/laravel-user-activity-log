@@ -28,7 +28,7 @@ class Log extends Model
 
     // attribute casting
     protected $casts = [
-        'log_datetime' => 'date',
+        'log_datetime' => 'datetime',
         'request_info' => 'array',
         'data' => 'array',
     ];
