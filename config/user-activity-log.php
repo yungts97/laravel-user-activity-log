@@ -4,9 +4,7 @@ return [
     'middleware' => ['api', 'auth'],
 
     # user model
-    'model' => [
-        'user' => "App\Models\User"
-    ],
+    'user_model' =>  "App\Models\User",
 
     # exclude tables for filter option
     'exclude_tables' => [

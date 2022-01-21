@@ -53,9 +53,7 @@ return [
     'middleware' => ['api', 'auth'],
 
     # user model
-    'model' => [
-        'user' => "App\Models\User"
-    ],
+    'user_model' =>  "App\Models\User",
 
     # exclude tables for filter option
     'exclude_tables' => [
@@ -97,3 +95,5 @@ Available paramaters for log filtering:
 | `tableName`           | `string`  | Filtering logs by the table name.               |
 | `dateFrom`            | `string`  | Filtering logs by the date range.               |
 | `dateTo`              | `string`  | Filtering logs by the date range.               |
+
+Example: `http://example.com/logs?page=1&itemsPerPage=10&userId=517`
