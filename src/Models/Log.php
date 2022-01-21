@@ -4,11 +4,13 @@ namespace Yungts97\LaravelUserActivityLog\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
 
 class Log extends Model
 {
+    // disable laravel auto insert created_at & updated_at fields
     public $timestamps = false;
-    public $dates = ['log_datetime'];
+
     protected $fillable = [
         'user_id',
         'log_datetime',
@@ -17,27 +19,44 @@ class Log extends Model
         'request_info',
         'data',
     ];
+
+    // eager load 
     protected $with = ['user'];
+
+    // append addition fields
     protected $appends = ['current_data', 'humanize_datetime'];
+
+    // attribute casting
     protected $casts = [
+        'log_datetime' => 'date',
         'request_info' => 'array',
         'data' => 'array',
     ];
 
+    // eloquent relationship
     public function user()
     {
-        $userInstance = config('user-activity-log.model.user') ?? '\App\Models\User';
+        $userInstance = config('user-activity-log.user_model', '\App\Models\User');
         return $this->belongsTo($userInstance);
+    }
+
+    // global scope
+    protected static function booted()
+    {
+        static::addGlobalScope('new_to_old', function (Builder $builder) {
+            $builder->orderBy('log_datetime', 'desc');
+        });
+    }
+
+    // local scope
+    public function scopeViewThisMonthActivity($query)
+    {
+        return $query->whereMonth('log_datetime', date('m'))->whereYear('log_datetime', date('Y'));//->orderBy('log_datetime', 'desc');
     }
 
     public function getHumanizeDatetimeAttribute()
     {
         return $this->log_datetime->diffForHumans();
-    }
-
-    public function scopeViewThisMonthActivity($query)
-    {
-        return $query->whereMonth('log_datetime', date('m'))->whereYear('log_datetime', date('Y'))->orderBy('log_datetime', 'desc');
     }
 
     public function getCurrentDataAttribute()

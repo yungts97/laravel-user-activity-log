@@ -27,7 +27,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
   protected function getEnvironmentSetUp($app)
   {
-    config()->set('user-activity-log.model.user', 'Yungts97\LaravelUserActivityLog\Tests\Models\User');
+    config()->set('user-activity-log.user_model', 'Yungts97\LaravelUserActivityLog\Tests\Models\User');
     config()->set('database.default', 'sqlite');
     config()->set('database.connections.sqlite', [
       'driver' => 'sqlite',

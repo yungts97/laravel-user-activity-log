@@ -12,7 +12,7 @@ class CreateLogTable extends Migration
      */
     public function up()
     {
-        $userInstance = config('user-activity-log.model.user') ?? '\App\Models\User';
+        $userInstance = config('user-activity-log.user_model') ?? '\App\Models\User';
 
         Schema::create('logs', function (Blueprint $table) use ($userInstance){
             $table->id();

@@ -56,7 +56,8 @@ class UserActivityLogController extends Controller
 
     private function applyFilter($userId, $logType, $tableName, $dateFrom, $dateTo, $itemsPerPage)
     {
-        $logs = Log::orderBy('log_datetime', 'desc');
+        //$logs = Log::orderBy('log_datetime', 'desc');
+        $logs = new Log(); 
         if ($userId) $logs = $logs->where('user_id', $userId);
         if ($logType) $logs = $logs->where('log_type', $logType);
         if ($tableName) $logs = $logs->where('table_name', $tableName);
