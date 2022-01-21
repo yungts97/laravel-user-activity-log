@@ -31,8 +31,17 @@ class UserActivityLogController extends Controller
 
     public function getFilterOption()
     {
+        // prepare sql for select table name from database
+        $connection = config('database.default');
+        $driver = DB::connection($connection)->getDriverName();
+        $sql = match($driver){
+            'pgsql' => "SELECT table_name FROM information_schema.tables where table_schema = '%s' ORDER BY table_schema,table_name;",
+            'sqlite' => "SELECT name as table_name FROM sqlite_master WHERE type='table' ORDER BY name",
+            'mysql' => "SHOW TABLES",
+        };
+        
         // prepare tables
-        $table_names = array_map('current', DB::select('SHOW TABLES'));
+        $table_names = array_map('current', DB::select($sql));
         $exclude_tables = config('user-activity-log.exclude_tables', []);
         $table_names = array_diff($table_names, $exclude_tables);
 
@@ -47,16 +56,15 @@ class UserActivityLogController extends Controller
         ]);
     }
 
-    private function isApplyingFilter()
+    private function isApplyingFilter(...$args)
     {
-        $args = func_get_args();
+        // filter out all the null values
         $args = array_filter($args);
         return count($args) > 0;
     }
 
     private function applyFilter($userId, $logType, $tableName, $dateFrom, $dateTo, $itemsPerPage)
     {
-        //$logs = Log::orderBy('log_datetime', 'desc');
         $logs = new Log(); 
         if ($userId) $logs = $logs->where('user_id', $userId);
         if ($logType) $logs = $logs->where('log_type', $logType);
