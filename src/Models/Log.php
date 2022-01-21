@@ -51,17 +51,21 @@ class Log extends Model
     // local scope
     public function scopeViewThisMonthActivity($query)
     {
-        return $query->whereMonth('log_datetime', date('m'))->whereYear('log_datetime', date('Y'));//->orderBy('log_datetime', 'desc');
+        return $query
+            ->whereMonth('log_datetime', date('m'))
+            ->whereYear('log_datetime', date('Y'));
     }
 
+    // additiona attribute for model
     public function getHumanizeDatetimeAttribute()
     {
         return $this->log_datetime->diffForHumans();
     }
 
+    // additiona attribute for model
     public function getCurrentDataAttribute()
     {
-        if(is_null($this->data) || $this->log_type === 'create') return null;
+        if (is_null($this->data) || $this->log_type === 'create') return null;
         return DB::table($this->table_name)->find($this->data['id']);
     }
 }
