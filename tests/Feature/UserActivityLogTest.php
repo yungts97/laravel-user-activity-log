@@ -5,6 +5,7 @@ namespace Yungts97\LaravelUserActivityLog\Tests\Feature;
 use Yungts97\LaravelUserActivityLog\Tests\TestCase;
 use Yungts97\LaravelUserActivityLog\Tests\Models\User;
 use Yungts97\LaravelUserActivityLog\Tests\Models\Post;
+use Yungts97\LaravelUserActivityLog\Tests\Models\PostWithoutLog;
 use Illuminate\Support\Facades\Auth;
 
 class UserActivityLogTest extends TestCase
@@ -70,6 +71,25 @@ class UserActivityLogTest extends TestCase
             'log_type' => 'delete',
             'user_id' => $user->id,
             'table_name' => 'posts'
+        ]);
+    }
+
+    /** @test */
+    function it_can_skip_logging()
+    {
+        //user login
+        $user = User::first();
+        Auth::login($user);
+
+        //create a post
+        $newPost = new PostWithoutLog(['name' => 'Post 1']);
+        $user->posts()->save($newPost);
+
+        //checking database doesn't have the activity log record
+        $this->assertDatabaseMissing('logs', [
+            'log_type' => 'create',
+            'user_id' => $user->id,
+            'table_name' => 'posts',
         ]);
     }
 }

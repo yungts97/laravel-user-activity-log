@@ -3,13 +3,9 @@
 namespace Yungts97\LaravelUserActivityLog\Tests\Models;
 
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
-use Yungts97\LaravelUserActivityLog\Traits\Loggable;
 
-class User extends Model implements Authenticatable
+class User extends BaseModel implements Authenticatable
 {
-    use Loggable; 
-
     protected $table = 'users';
 
     protected $guarded = [];

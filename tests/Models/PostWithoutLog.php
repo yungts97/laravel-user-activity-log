@@ -2,8 +2,12 @@
 
 namespace Yungts97\LaravelUserActivityLog\Tests\Models;
 
-class Post extends BaseModel
+use Yungts97\LaravelUserActivityLog\Traits\SkipLogging;
+
+class PostWithoutLog extends BaseModel
 {
+    use SkipLogging;
+
     protected $table = 'posts';
 
     protected $guarded = [];
