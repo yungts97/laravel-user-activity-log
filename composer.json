@@ -9,12 +9,10 @@
         "activity",
         "log"
     ],
-    "authors": [
-        {
-            "name": "Yung Teck Sheng",
-            "email": "yungts97@gmail.com"
-        }
-    ],
+    "authors": [{
+        "name": "Yung Teck Sheng",
+        "email": "yungts97@gmail.com"
+    }],
     "require-dev": {
         "orchestra/testbench": "^6.0",
         "phpunit/phpunit": "^9.5"
