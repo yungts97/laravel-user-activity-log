@@ -1,3 +1,4 @@
+<p align="center"><img src="/art/background.png" alt="Logo mark of Laravel User Activity Log"></p>
 <h1 align="center">Laravel User Activity Log</h1>
 <p align="center">
     <a href="https://packagist.org/packages/yungts97/laravel-user-activity-log">
