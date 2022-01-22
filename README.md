@@ -10,6 +10,9 @@
     <a href="https://packagist.org/packages/yungts97/laravel-user-activity-log">
         <img src="https://img.shields.io/packagist/dt/yungts97/laravel-user-activity-log?color=ff69b4"/>
     </a>
+    <a href="https://github.com/yungts97/laravel-user-activity-log/actions">
+        <img src="https://github.com/yungts97/laravel-user-activity-log/workflows/CI/badge.svg"/>
+    </a>
 </p>
 
 `yungts97/laravel-user-activity-log` is a package for Laravel 8.x that provides easy to use features to log the activities of the users of your Laravel app. It provides automatic logging for the model events without complicated action. All activity will be stored in the `logs` table. 
