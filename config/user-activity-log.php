@@ -1,6 +1,6 @@
 <?php
 return [
-    # add your own middleware here
+    # add your own middleware here (route middleware)
     'middleware' => ['api', 'auth'],
 
     # user model

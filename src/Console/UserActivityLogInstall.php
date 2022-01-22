@@ -38,38 +38,39 @@ class UserActivityLogInstall extends Command
      * @return int
      */
     public function handle()
-    {   $config_file = 'user-activity-log.php';
+    {
+        $config_file = 'user-activity-log.php';
         $migration_file = '2022_01_17_000000_create_log_table.php';
 
-        if(File::exists(config_path($config_file)))
-        {
-            if ($this->confirm("user-activity.php config file already exist. Do you want to overwrite?")) {
+        //config
+        if (File::exists(config_path($config_file))) {
+            if ($this->confirm("user-activity-log.php config file already exist. Do you want to overwrite it?")) {
+                $this->info("Overwriting config file...");
                 $this->publishConfig();
-                $this->info("config overwrite finished");
+                $this->info("user-activity-log.php overwrite finished.");
             } else {
-                $this->info("skipped config publish");
+                $this->info("Skipped config file publish.");
             }
-        }
-        else
-        {
+        } else {
             $this->publishConfig();
-            $this->info("config published");
+            $this->info("Config file published");
         }
 
         //migration
         if (File::exists(database_path("migrations/$migration_file"))) {
-            if ($this->confirm("migration file already exist. Do you want to overwrite?")) {
+            if ($this->confirm("2022_01_17_000000_create_log_table.php migration file already exist. Do you want to overwrite it?")) {
+                $this->info("Overwriting migration file...");
                 $this->publishMigration();
-                $this->info("migration overwrite finished");
+                $this->info("2022_01_17_000000_create_log_table.php overwrite finished.");
             } else {
-                $this->info("skipped migration publish");
+                $this->info("Skipped migration file publish.");
             }
         } else {
             $this->publishMigration();
-            $this->info("migration published");
+            $this->info("Migration file published.");
         }
 
-        $this->line('-----------------------------');
+        $this->line('=====================================================');
         if (!Schema::hasTable('logs')) {
             $this->call('migrate');
         }

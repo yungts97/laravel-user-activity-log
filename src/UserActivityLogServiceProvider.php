@@ -7,9 +7,10 @@ use Yungts97\LaravelUserActivityLog\Console\UserActivityLogInstall;
 
 class UserActivityLogServiceProvider extends ServiceProvider
 {
+    // constant variables
     const CONFIG_PATH = __DIR__ . '/../config/user-activity-log.php';
     const ROUTE_PATH = __DIR__ . '/../routes';
-    const MIGRATION_PATH = __DIR__ . '/../migrations';
+    const MIGRATION_PATH = __DIR__ . '/../database/migrations';
 
     public function boot()
     {
@@ -28,7 +29,8 @@ class UserActivityLogServiceProvider extends ServiceProvider
 
         // register event service provider
         $this->app->register(UserActivityLogEventServiceProvider::class);
-        $this->commands([UserActivityLogInstall::class]);
 
+        // register artisan commands
+        $this->commands([UserActivityLogInstall::class]);
     }
 }

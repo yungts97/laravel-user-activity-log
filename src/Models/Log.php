@@ -65,7 +65,7 @@ class Log extends Model
     // additiona attribute for model
     public function getCurrentDataAttribute()
     {
-        if (is_null($this->data) || $this->log_type === 'create') return null;
+        if (is_null($this->table_name) || is_null($this->data) || $this->log_type === 'create') return null;
         return DB::table($this->table_name)->find($this->data['id']);
     }
 }
