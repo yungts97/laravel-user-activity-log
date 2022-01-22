@@ -143,7 +143,7 @@ Exp. `http://example.com/logs?page=1&itemsPerPage=10&userId=517`
             "table_name": null,
             "log_type": "login",
             "request_info": {
-                "ip": "172.18.0.1",
+                "ip": "192.121.0.56",
                 "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36"
             },
             "data": null,
@@ -184,8 +184,8 @@ Exp. `http://example.com/logs?page=1&itemsPerPage=10&userId=517`
 ```json
 {
     "table_names": [
-        "posts"，
-        "users"，
+        "posts",
+        "users",
     ],
     "log_types": [
         "create",
@@ -205,7 +205,7 @@ Exp. `http://example.com/logs?page=1&itemsPerPage=10&userId=517`
             "table_name": null,
             "log_type": "login",
             "request_info": {
-                "ip": "172.18.0.1",
+                "ip": "192.121.0.56",
                 "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36"
             },
             "data": null,
