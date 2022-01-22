@@ -1,13 +1,13 @@
 <h1 align="center">Laravel User Activity Log</h1>
 <p align="center">
     <a href="https://packagist.org/packages/yungts97/laravel-user-activity-log">
-        <img src="https://badgen.net/packagist/v/yungts97/laravel-user-activity-log"/>
+        <img src="https://img.shields.io/packagist/v/yungts97/laravel-user-activity-log?color=24BDCC"/>
     </a>
-    <a href="https://opensource.org/licenses/mit-license.php">
-        <img src="https://badges.frapsoft.com/os/mit/mit.png?v=103"/>
+    <a href="https://github.com/yungts97/laravel-user-activity-log/blob/v1.0.0/LICENSE.md">
+        <img src="https://img.shields.io/packagist/l/yungts97/laravel-user-activity-log"/>
     </a>
     <a href="https://packagist.org/packages/yungts97/laravel-user-activity-log">
-        <img src="https://badgen.net/packagist/dt/yungts97/laravel-user-activity-log"/>
+        <img src="https://img.shields.io/packagist/dt/yungts97/laravel-user-activity-log?color=ff69b4"/>
     </a>
 </p>
 
