@@ -4,6 +4,7 @@ namespace Yungts97\LaravelUserActivityLog;
 
 use Illuminate\Support\ServiceProvider;
 use Yungts97\LaravelUserActivityLog\Console\UserActivityLogInstall;
+use Yungts97\LaravelUserActivityLog\Console\UserActivityLogCleanup;
 
 class UserActivityLogServiceProvider extends ServiceProvider
 {
@@ -31,6 +32,6 @@ class UserActivityLogServiceProvider extends ServiceProvider
         $this->app->register(UserActivityLogEventServiceProvider::class);
 
         // register artisan commands
-        $this->commands([UserActivityLogInstall::class]);
+        $this->commands([UserActivityLogInstall::class, UserActivityLogCleanup::class]);
     }
 }
