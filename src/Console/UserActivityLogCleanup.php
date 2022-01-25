@@ -2,6 +2,7 @@
 
 namespace Yungts97\LaravelUserActivityLog\Console;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Console\Command;
 use Yungts97\LaravelUserActivityLog\Models\Log;
 
@@ -13,7 +14,6 @@ class UserActivityLogCleanup extends Command
      * @var string
      */
     protected $signature = 'user-activity-log:clean 
-                            {flush?   : all}
                             {--day=   : To delete user activity log that older than this days }
                             {--month= : Number of days that old}
                             {--year=  : A year of the user activity log to delete}
@@ -51,33 +51,67 @@ class UserActivityLogCleanup extends Command
             'year' => $this->option('year'),
             'date' => $this->option('date'),
         ];
-        $flagOptions = [
-            'force' => $this->option('force'),
-        ];
 
-        $valuedScopeOptions = array_filter($scopeOptions);
+        $valuedScopeOptions = filter_empty($scopeOptions); // should be only one option in the array, if not then return error.
         if (count($valuedScopeOptions) > 1)
             return $this->error('Too many options! You only able to have 1 scope option [day, month, year, date] with 1 flag scope [force]');
 
-        if (!$this->validateOptions($valuedScopeOptions))
-            return $this->error('Too many options! You only able to have 1 scope option [day, month, year, date] with 1 flag scope [force]');
+        if (!$this->validateOptions($valuedScopeOptions)) {
+            $key = get_key($valuedScopeOptions);
+            $message = match ($key) {
+                'day' => 'Day be numeric value',
+                'month' => 'Month must in mm/yyyy format',
+                'year' => 'Year must be 1950 - 2200',
+                'date' => 'Date must in dd/mm/yyyy format',
+            };
+            return $this->error("Invalid option value! [$key]. $message");
+        }
 
-        dd(date('m'));
+        $this->deleteLog($valuedScopeOptions);
     }
-
     protected function validateOptions(array $option)
     {
-        $key = array_keys($option)[0];
-        $log = new Log();
-        if ($key === 'day') return is_numeric($option[$key]);
-        else if ($key === 'month') return is_numeric($option[$key]) && (+$option[$key] >= 1 && +$option[$key] <= 12);
-        else if ($key === 'year') return is_numeric($option[$key]) && (+$option[$key] >= 1950 && +$option[$key] <= 9999);
-        else return (bool)strtotime($option[$key]);
+        $key = get_key($option);
+        if (!$key) return true;
+        else if ($key === 'day') return is_numeric($option[$key]);
+        else if ($key === 'month') return is_month_year($option[$key]);
+        else if ($key === 'year') return is_year($option[$key]);
+        else return is_date($option[$key]);
+    }
 
-        if ($key === 'day') $log->whereRaw('log_date < NOW() - INTERVAL ? DAY', $option[$key]);
-        else if ($key === 'month') $log->whereMonth('log_datetime', $option[$key]);
-        else if ($key === 'year') $log->whereYear('log_datetime', $option[$key]);
-        else if ($key === 'date') $log->whereDate('log_datetime', $option[$key]);
-        else $log->whereRaw('log_date < NOW() - INTERVAL ? DAY', 30);
+    protected function deleteLog(array $scopeOption)
+    {
+        $key = get_key($scopeOption);
+        $log = new Log();
+        if ($key === 'month')
+        {
+            [$month, $year] = explode('/', $scopeOption[$key]);
+            $log = $log->whereMonth('log_datetime', $month)->whereYear('log_datetime', $year);
+        } 
+        else if ($key === 'year') $log = $log->whereYear('log_datetime', $scopeOption[$key]);
+        else if ($key === 'date') $log = $log->whereDate('log_datetime', toYmd($scopeOption[$key]));
+        else 
+        {
+            [$sql, $value] = $this->prepareQueryForDay($scopeOption[$key] ?? 30);
+            $log = $log->whereRaw($sql, $value);
+        }
+        $log->delete();
+    }
+
+    protected function prepareQueryForDay($value)
+    {
+        $connection = config('database.default');
+        $driver = DB::connection($connection)->getDriverName();
+
+        $sql = match ($driver) {
+            'sqlite' => "log_datetime < DATETIME('now', ?)",
+            'mysql' => "log_datetime < NOW() - INTERVAL ? DAY",
+        };
+
+        $value = match ($driver) {
+            'sqlite' => "-$value days",
+            'mysql' => $value,
+        };
+        return [$sql, $value];
     }
 }
