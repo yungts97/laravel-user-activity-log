@@ -1,16 +1,24 @@
 <?php
-
 namespace Yungts97\LaravelUserActivityLog\Tests\Models;
 
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Yungts97\LaravelUserActivityLog\Tests\Database\Factories\UserFactory;
 
 class User extends BaseModel implements Authenticatable
 {
+    use HasFactory;
+
     protected $table = 'users';
 
     protected $guarded = [];
 
     protected $fillable = ['id', 'name'];
+
+    protected static function newFactory()
+    {
+        return UserFactory::new();
+    }
 
     public function posts()
     {

@@ -1,9 +1,13 @@
 <?php
-
 namespace Yungts97\LaravelUserActivityLog\Tests\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Yungts97\LaravelUserActivityLog\Tests\Database\Factories\UserFactory;
 
 class Post extends BaseModel
 {
+    use HasFactory;
+
     protected $table = 'posts';
 
     protected $guarded = [];
@@ -13,5 +17,10 @@ class Post extends BaseModel
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    protected static function newFactory()
+    {
+        return UserFactory::new();
     }
 }
