@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
-use Yungts97\LaravelUserActivityLog\Models\Log;
 
 
 class LogoutTest extends TestCase
@@ -33,10 +32,4 @@ class LogoutTest extends TestCase
         Auth::logout();
         Event::assertDispatched(Logout::class);
     }
-
-    /** @test */
-    // function it_can_log_on_logout()
-    // {
-        
-    // }
 }

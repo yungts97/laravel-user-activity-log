@@ -7,8 +7,6 @@ use Yungts97\LaravelUserActivityLog\Tests\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Login;
-use Yungts97\LaravelUserActivityLog\Models\Log;
-
 
 class LoginTest extends TestCase
 {
