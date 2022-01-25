@@ -1,5 +1,4 @@
 <?php
-
 namespace Yungts97\LaravelUserActivityLog\Tests;
 
 use Yungts97\LaravelUserActivityLog\UserActivityLogServiceProvider;
@@ -7,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Encryption\Encrypter;
 use Illuminate\Database\Schema\Blueprint;
 use Yungts97\LaravelUserActivityLog\Tests\Models\User;
+use Yungts97\LaravelUserActivityLog\Tests\Database\Seeders\UserSeeder;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
@@ -44,7 +44,10 @@ class TestCase extends \Orchestra\Testbench\TestCase
         $this->migrateActivityLogTable();
 
         $this->createTables('users', 'posts');
-        $this->seedModels(User::class);
+        
+        $this->seed([
+            UserSeeder::class,
+        ]);
     }
 
     protected function migrateActivityLogTable()
@@ -69,17 +72,6 @@ class TestCase extends \Orchestra\Testbench\TestCase
                     $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
                 }
             });
-        });
-    }
-
-    protected function seedModels(...$modelClasses)
-    {
-        collect($modelClasses)->each(function (string $modelClass) {
-            foreach (range(0, 1) as $index) {
-                $modelClass::withoutEvents(function () use ($modelClass, $index) {
-                    $modelClass::create(['name' => "name {$index}"]);
-                });
-            }
         });
     }
 }
