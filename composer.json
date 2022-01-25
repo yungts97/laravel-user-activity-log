@@ -27,7 +27,10 @@
     "autoload": {
         "psr-4": {
             "Yungts97\\LaravelUserActivityLog\\": "src"
-        }
+        },
+        "files": [
+            "src/Helpers/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
