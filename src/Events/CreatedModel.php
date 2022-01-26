@@ -16,6 +16,5 @@ class CreatedModel
      */
     public function __construct(public Model $model)
     {
-        //dd($model);
     }
 }

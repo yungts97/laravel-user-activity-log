@@ -2,7 +2,6 @@
 
 namespace Yungts97\LaravelUserActivityLog\Console;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Console\Command;
 use Yungts97\LaravelUserActivityLog\Models\Log;
 
