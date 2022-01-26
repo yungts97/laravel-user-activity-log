@@ -4,6 +4,7 @@ namespace Yungts97\LaravelUserActivityLog\Controllers;
 
 use Yungts97\LaravelUserActivityLog\Models\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Artisan;
 use Carbon\CarbonTimeZone;
 
 class UserActivityLogController extends Controller
@@ -33,7 +34,7 @@ class UserActivityLogController extends Controller
     {
         // prepare sql for select table name from database
         $connection = config('database.default');
-        $driver = DB::connection($connection)->getDriverName();
+        $driver = config("database.connections.{$connection}.driver");
         $sql = match($driver){
             'pgsql' => "SELECT table_name FROM information_schema.tables where table_schema = '%s' ORDER BY table_schema,table_name;",
             'sqlite' => "SELECT name as table_name FROM sqlite_master WHERE type='table' ORDER BY name",
@@ -53,6 +54,14 @@ class UserActivityLogController extends Controller
         return response()->json([
             'table_names' => [...$table_names],
             'log_types' => $log_types
+        ]);
+    }
+
+    public function destroy()
+    {
+        $deletedNums = Artisan::call("user-activity-log:clean");
+        return response()->json([
+            'message' => "Deleted Logs: $deletedNums"
         ]);
     }
 
