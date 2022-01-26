@@ -40,6 +40,7 @@ class UserActivityLogFlush extends Command
     {
         if ($this->confirm('Do you wish to continue?', false)) {
             Log::truncate();
+            $this->info("Logs table has been flushed successfully.");
         }
     }
     
