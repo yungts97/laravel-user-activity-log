@@ -55,6 +55,12 @@ class Log extends Model
             ->whereMonth('log_datetime', date('m'))
             ->whereYear('log_datetime', date('Y'));
     }
+    
+    public function scopeWhereMonthYear($query, $monthYear)
+    {
+        [$month, $year] = explode('/', $monthYear);
+        return $query->whereMonth('log_datetime', $month)->whereYear('log_datetime', $year);
+    }
 
     // additiona attribute for model
     public function getHumanizeDatetimeAttribute()
