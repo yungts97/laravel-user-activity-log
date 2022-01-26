@@ -14,11 +14,10 @@ class UserActivityLogCleanup extends Command
      * @var string
      */
     protected $signature = 'user-activity-log:clean 
-                            {--day=   : To delete user activity log that older than this days }
-                            {--month= : Number of days that old}
-                            {--year=  : A year of the user activity log to delete}
-                            {--date=  : A specific date of user activity log to delete}
-                            {--force  : Whether the user activity log should be permanently delete.}
+                            {--day=   : Delete user activity log older than N days.}
+                            {--month= : Delete user activity logs for a month of the year.}
+                            {--year=  : Delete user activity logs for a year.}
+                            {--date=  : Delete user activity logs for a specific date.}
                             ';
 
     /**
@@ -45,73 +44,73 @@ class UserActivityLogCleanup extends Command
      */
     public function handle()
     {
-        $scopeOptions = [
+        // get input values from command line
+        $options = [
             'day' => $this->option('day'),
             'month' => $this->option('month'),
             'year' => $this->option('year'),
             'date' => $this->option('date'),
         ];
+        
+        $valuedOptions = filter_empty($options); 
+        if (count($valuedOptions) > 1)
+            // should be only one option in the array, if not then return error.
+            return $this->error('Too many options! You only able to have 1 option [day, month, year, date].');
 
-        $valuedScopeOptions = filter_empty($scopeOptions); // should be only one option in the array, if not then return error.
-        if (count($valuedScopeOptions) > 1)
-            return $this->error('Too many options! You only able to have 1 scope option [day, month, year, date] with 1 flag scope [force]');
-
-        if (!$this->validateOptions($valuedScopeOptions)) {
-            $key = get_key($valuedScopeOptions);
-            $message = match ($key) {
+        [$key, $value] = get_key_and_value($valuedOptions);
+        if (!$this->validateOptions($key, $value)) {
+            $errorMessage = match ($key) {
                 'day' => 'Day be numeric value',
                 'month' => 'Month must in mm/yyyy format',
                 'year' => 'Year must be 1950 - 2200',
                 'date' => 'Date must in dd/mm/yyyy format',
             };
-            return $this->error("Invalid option value! [$key]. $message");
+            return $this->error("Invalid option value! [$key]. $errorMessage");
         }
-
-        $this->deleteLog($valuedScopeOptions);
+        return $this->deleteLog($key, $value);
     }
-    protected function validateOptions(array $option)
+            
+    /**
+     *  This function is used to validate the options.
+     */
+    protected function validateOptions(?string $key, ?string $value)
     {
-        $key = get_key($option);
         if (!$key) return true;
-        else if ($key === 'day') return is_numeric($option[$key]);
-        else if ($key === 'month') return is_month_year($option[$key]);
-        else if ($key === 'year') return is_year($option[$key]);
-        else return is_date($option[$key]);
+        else if ($key === 'day') return is_numeric($value);
+        else if ($key === 'month') return is_month_year($value);
+        else if ($key === 'year') return is_year($value);
+        else return is_date($value);
     }
 
-    protected function deleteLog(array $scopeOption)
+    /**
+     *  This function is perform log deletion.
+     */
+    protected function deleteLog(?string $key, ?string $value)
     {
-        $key = get_key($scopeOption);
         $log = new Log();
-        if ($key === 'month')
-        {
-            [$month, $year] = explode('/', $scopeOption[$key]);
-            $log = $log->whereMonth('log_datetime', $month)->whereYear('log_datetime', $year);
-        } 
-        else if ($key === 'year') $log = $log->whereYear('log_datetime', $scopeOption[$key]);
-        else if ($key === 'date') $log = $log->whereDate('log_datetime', toYmd($scopeOption[$key]));
-        else 
-        {
-            [$sql, $value] = $this->prepareQueryForDay($scopeOption[$key] ?? 30);
-            $log = $log->whereRaw($sql, $value);
-        }
-        $log->delete();
+        $log = match($key){
+            'year' => $log->whereYear('log_datetime', $value),
+            'date' => $log->whereDate('log_datetime', toYmd($value)),
+            'month' => $log->whereMonthYear($value),
+            default => $log->whereRaw($this->prepareQueryForDay($value ?? 7)),
+        };
+        $affected = $log->delete();
+        $this->info("Deleted logs: $affected");
+        return $affected;
     }
 
+    /**
+     *  This function is prepare raw query for day.
+     */
     protected function prepareQueryForDay($value)
     {
         $connection = config('database.default');
-        $driver = DB::connection($connection)->getDriverName();
+        $driver = config("database.connections.{$connection}.driver");
 
         $sql = match ($driver) {
-            'sqlite' => "log_datetime < DATETIME('now', ?)",
-            'mysql' => "log_datetime < NOW() - INTERVAL ? DAY",
+            'sqlite' => "log_datetime < DATETIME('now', '-$value days')",
+            'mysql' => "log_datetime < NOW() - INTERVAL $value DAY",
         };
-
-        $value = match ($driver) {
-            'sqlite' => "-$value days",
-            'mysql' => $value,
-        };
-        return [$sql, $value];
+        return $sql;
     }
 }
