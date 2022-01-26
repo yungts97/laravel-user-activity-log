@@ -95,4 +95,19 @@ if (! function_exists('get_key')) {
         return array_keys($value)[0] ?? null;
     }
 }
+if (! function_exists('get_key_and_value')) {
+    /**
+     * This only works for the array which only contains one item.
+     *
+     * @param  mixed  $value
+     * @return string | null
+     */
+    function get_key_and_value($value = null)
+    {
+        return [
+            array_keys($value)[0] ?? null,
+            array_values($value)[0] ?? null
+        ];
+    }
+}
 
