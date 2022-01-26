@@ -63,4 +63,20 @@ class ApiRouteTest extends TestCase
             fn (AssertableJson $json) => $json->hasAll('table_names', 'log_types')
         );
     }
+
+    /** @test */
+    function it_can_delete_log()
+    {
+        $user = User::first();
+        Auth::login($user);
+
+        // Act
+        $response = $this->deleteJson('/api/logs');
+
+        // Assert
+        $response->assertStatus(200);
+        $response->assertJson(
+            fn (AssertableJson $json) => $json->hasAll('message')
+        );
+    }
 }

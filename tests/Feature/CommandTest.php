@@ -59,9 +59,11 @@ class CommandTest extends TestCase
     /** @test */
     function it_can_delete_logs_via_command_without_option()
     {
-        $before31Days = Date('Y-m-d H:i:s', strtotime('-31 days'));
+        //without option
+        //default before 7 day  
+        $before8Days = Date('Y-m-d H:i:s', strtotime('-8 days'));
         
-        Log::factory(3)->state(['log_datetime' => $before31Days])->create();
+        Log::factory(3)->state(['log_datetime' => $before8Days])->create();
         Log::factory(2)->state(['log_datetime' => Date('Y-m-d H:i:s')])->create();
         $this->assertCount(5, Log::all());
 
@@ -73,7 +75,7 @@ class CommandTest extends TestCase
     function it_can_trigger_error_message()
     {
         $this->artisan('user-activity-log:clean --year=2021 --month=12/2021')
-            ->expectsOutput('Too many options! You only able to have 1 scope option [day, month, year, date] with 1 flag scope [force]');
+            ->expectsOutput('Too many options! You only able to have 1 option [day, month, year, date].');
 
         $this->artisan('user-activity-log:clean --year=999')
             ->expectsOutput('Invalid option value! [year]. Year must be 1950 - 2200');
