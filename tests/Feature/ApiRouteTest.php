@@ -2,10 +2,11 @@
 
 namespace Yungts97\LaravelUserActivityLog\Tests\Feature;
 
-use Yungts97\LaravelUserActivityLog\Tests\TestCase;
-use Yungts97\LaravelUserActivityLog\Tests\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Testing\Fluent\AssertableJson;
+use Yungts97\LaravelUserActivityLog\Tests\TestCase;
+use Yungts97\LaravelUserActivityLog\Tests\Models\Post;
+use Yungts97\LaravelUserActivityLog\Tests\Models\User;
 
 class ApiRouteTest extends TestCase
 {
@@ -33,6 +34,26 @@ class ApiRouteTest extends TestCase
 
         // Assert
         $response->assertStatus(200);
+    }
+
+    /** @test */
+    function it_can_retrieve_logs_with_filter_by_id()
+    {
+        $user = User::first();
+        Auth::login($user);
+
+        //create a post
+        $newPost = new Post(['name' => 'Post 1']);
+        $user->posts()->save($newPost);
+
+        // Act
+        $response = $this->getJson("/api/logs?tableName=posts&dataId={$newPost->id}");
+
+        // Assert
+        $response->assertStatus(200);
+        $response->assertJson(
+            fn (AssertableJson $json) => $json->has('data', 1)->etc()
+        );
     }
 
     /** @test */
