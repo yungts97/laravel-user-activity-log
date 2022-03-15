@@ -44,7 +44,8 @@ class Log extends Model
     protected static function booted()
     {
         static::addGlobalScope('new_to_old', function (Builder $builder) {
-            $builder->orderBy('log_datetime', 'desc');
+            // added orderby ID to fixed the unexpected duplicate log bug, becasue log datetime might have been same
+            $builder->orderBy('log_datetime', 'desc')->orderBy('id', 'desc');
         });
     }
 
@@ -55,7 +56,7 @@ class Log extends Model
             ->whereMonth('log_datetime', date('m'))
             ->whereYear('log_datetime', date('Y'));
     }
-    
+
     public function scopeWhereMonthYear($query, $monthYear)
     {
         [$month, $year] = explode('/', $monthYear);
