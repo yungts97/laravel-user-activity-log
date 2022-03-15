@@ -2,11 +2,12 @@
 
 namespace Yungts97\LaravelUserActivityLog\Tests\Feature;
 
-use Yungts97\LaravelUserActivityLog\Tests\TestCase;
-use Yungts97\LaravelUserActivityLog\Tests\Models\User;
-use Yungts97\LaravelUserActivityLog\Tests\Models\Post;
-use Yungts97\LaravelUserActivityLog\Tests\Models\PostWithoutLog;
 use Illuminate\Support\Facades\Auth;
+use Yungts97\LaravelUserActivityLog\Tests\TestCase;
+use Yungts97\LaravelUserActivityLog\Tests\Models\Post;
+use Yungts97\LaravelUserActivityLog\Tests\Models\User;
+use Yungts97\LaravelUserActivityLog\Tests\Models\PostWithHidden;
+use Yungts97\LaravelUserActivityLog\Tests\Models\PostWithoutLog;
 
 class UserActivityLogTest extends TestCase
 {
@@ -90,6 +91,27 @@ class UserActivityLogTest extends TestCase
             'log_type' => 'create',
             'user_id' => $user->id,
             'table_name' => 'posts',
+        ]);
+    }
+
+    /** @test */
+    function it_can_hide_attribute_on_logging()
+    {
+        //user login
+        $user = User::first();
+        Auth::login($user);
+
+        //create a post
+        $newPost = new PostWithHidden(['name' => 'Post 1']);
+        $user->posts()->save($newPost);
+        $data = json_encode($newPost->makeHidden(['name'])->toArray());
+
+        //checking database doesn't have the activity log record
+        $this->assertDatabaseHas('logs', [
+            'log_type' => 'create',
+            'user_id' => $user->id,
+            'table_name' => 'posts',
+            'data' => $data
         ]);
     }
 }
