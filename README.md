@@ -77,6 +77,17 @@ class Post extends BaseModel
 }
 ```
 
+Sometimes, you don't want to save certain attributes of your model in logging. You can add `$log_hidden` attribute to your model.
+```php
+use Yungts97\LaravelUserActivityLog\Traits\SkipLogging;
+
+class Post extends BaseModel
+{
+    public $log_hidden = ['created_at', 'description'];
+    ...
+}
+```
+
 You can retrieve all activity using the `Yungts97\LaravelUserActivityLog\Models\Log` model.
 ```php
 Log::all();
@@ -128,6 +139,7 @@ Available paramaters for log filtering:
 | `page`                | `integer` | The page number for log pagination.             |
 | `itemsPerPage`        | `integer` | The number item per page for log pagination     |
 | `userId`              | `integer` | Filtering logs by the user ID.                  |
+| `dataId`              | `integer` | Filtering logs by the data ID.                  |
 | `logType`             | `string`  | Filtering logs by log type.                     |
 | `tableName`           | `string`  | Filtering logs by the table name.               |
 | `dateFrom`            | `string`  | Filtering logs by the date range. **(Must have dateFrom & dateTo paramaters)**              |
@@ -204,23 +216,23 @@ Exp. `http://example.com/logs?page=1&itemsPerPage=10&userId=517`
 `/logs/77`
 ```json
 {
-            "id": 77,
-            "user_id": 942,
-            "log_datetime": "2022-01-22T05:56:57.000000Z",
-            "table_name": null,
-            "log_type": "login",
-            "request_info": {
-                "ip": "192.121.0.56",
-                "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36"
-            },
-            "data": null,
-            "current_data": null,
-            "humanize_datetime": "17 seconds ago",
-            "user": {
-                "id": 1,
-                "name": "User 1",
-            }
-        },
+    "id": 77,
+    "user_id": 942,
+    "log_datetime": "2022-01-22T05:56:57.000000Z",
+    "table_name": null,
+    "log_type": "login",
+    "request_info": {
+        "ip": "192.121.0.56",
+        "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36"
+    },
+    "data": null,
+    "current_data": null,
+    "humanize_datetime": "17 seconds ago",
+    "user": {
+        "id": 1,
+        "name": "User 1",
+    }
+},
 ```
 ## License
 
