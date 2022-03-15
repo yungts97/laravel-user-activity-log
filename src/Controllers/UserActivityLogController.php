@@ -15,11 +15,12 @@ class UserActivityLogController extends Controller
         $userId = request()->input('userId');
         $logType = request()->input('logType');
         $tableName = request()->input('tableName');
+        $dataId = request()->input('dataId');
         $dateFrom = request()->input('dateFrom');
         $dateTo = request()->input('dateTo');
 
-        $logs = $this->isApplyingFilter($userId, $logType, $tableName, $dateFrom, $dateTo) ?
-            $this->applyFilter($userId, $logType, $tableName, $dateFrom, $dateTo, $itemsPerPage) :
+        $logs = $this->isApplyingFilter($userId, $logType, $tableName, $dataId, $dateFrom, $dateTo) ?
+            $this->applyFilter($userId, $logType, $tableName, $dataId, $dateFrom, $dateTo, $itemsPerPage) :
             Log::viewThisMonthActivity()->paginate($itemsPerPage);
 
         return response()->json($logs);
@@ -35,12 +36,12 @@ class UserActivityLogController extends Controller
         // prepare sql for select table name from database
         $connection = config('database.default');
         $driver = config("database.connections.{$connection}.driver");
-        $sql = match($driver){
+        $sql = match ($driver) {
             'pgsql' => "SELECT table_name FROM information_schema.tables where table_schema = '%s' ORDER BY table_schema,table_name;",
             'sqlite' => "SELECT name as table_name FROM sqlite_master WHERE type='table' ORDER BY name",
             'mysql' => "SHOW TABLES",
         };
-        
+
         // prepare tables
         $table_names = array_map('current', DB::select($sql));
         $exclude_tables = config('user-activity-log.exclude_tables', []);
@@ -72,12 +73,13 @@ class UserActivityLogController extends Controller
         return count($args) > 0;
     }
 
-    private function applyFilter($userId, $logType, $tableName, $dateFrom, $dateTo, $itemsPerPage)
+    private function applyFilter($userId, $logType, $tableName, $dataId, $dateFrom, $dateTo, $itemsPerPage)
     {
-        $logs = new Log(); 
+        $logs = new Log();
         if ($userId) $logs = $logs->where('user_id', $userId);
         if ($logType) $logs = $logs->where('log_type', $logType);
         if ($tableName) $logs = $logs->where('table_name', $tableName);
+        if ($dataId) $logs = $logs->where('data->id', (int)$dataId);
         if ($dateFrom && $dateTo) {
             $offsetTimezone = CarbonTimeZone::create(config('user-activity-log.timezone', 'UTC'))->toOffsetTimeZone(); // +08:00
             $dateFrom = "$dateFrom 00:00:00";
