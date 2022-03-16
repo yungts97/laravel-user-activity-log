@@ -2,12 +2,14 @@
 
 namespace Yungts97\LaravelUserActivityLog\Traits\ListenerTraits;
 
+use Illuminate\Support\Arr;
+
 trait HasData
 {
     protected function getData()
     {
         return $this->event_name === 'create' ?
-            $this->event->model->makeHidden($this->event->model->log_hidden ?? []) :
-            $this->event->model->makeHidden($this->event->model->log_hidden ?? [])->getRawOriginal();
+            Arr::except($this->event->model->toArray(), $this->event->model->log_hidden ?? []) :
+            Arr::except($this->event->model->getRawOriginal(), $this->event->model->log_hidden ?? []);
     }
 }
