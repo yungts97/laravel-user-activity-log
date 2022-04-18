@@ -126,7 +126,7 @@ return [
 ];
 ```
 
-## Routes
+## API Routes
 | Endpoint              | Method  | Response Format | Description                                     |
 | --------------------- | ------- | --------------- | ----------------------------------------------- | 
 | `/logs`               | `GET`   | JSON            | To retrieve user activity logs.                 |
@@ -145,7 +145,7 @@ Available paramaters for log filtering:
 | `dateFrom`            | `string`  | Filtering logs by the date range. **(Must have dateFrom & dateTo paramaters)**              |
 | `dateTo`              | `string`  | Filtering logs by the date range. **(Must have dateFrom & dateTo paramaters)**              |
 
-Exp. `http://example.com/logs?page=1&itemsPerPage=10&userId=517`
+Exp. `http://example.com/api/logs?page=1&itemsPerPage=10&userId=517`
 
 ### Sample Response
 `/logs`
