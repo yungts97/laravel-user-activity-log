@@ -3,7 +3,7 @@ return [
     # add your own middleware here (route middleware)
     'middleware' => ['api', 'auth'],
 
-    # user model
+    # user model class
     'user_model' =>  "App\Models\User",
 
     # exclude tables for filter option
@@ -24,6 +24,8 @@ return [
         'logout' => true
     ],
 
-    # timezone for log date time
+    # timezone for log date time (Change to your region time zone)
+    # UTC is always the time zone being recorded.
+    # define your timezone to have the accurate logs time and filtered record (Especially filtered by date time)
     'timezone' => 'UTC'
 ];
