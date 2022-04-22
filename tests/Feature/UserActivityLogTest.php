@@ -114,4 +114,26 @@ class UserActivityLogTest extends TestCase
             'data' => $data
         ]);
     }
+
+    /** @test */
+    function it_can_get_logs_from_the_model()
+    {
+        //user login
+        $user = User::first();
+        Auth::login($user);
+
+        //create a post
+        $newPost = new Post(['name' => 'Post 1']);
+        $user->posts()->save($newPost);
+
+        //checking database have the activity log record
+        $this->assertDatabaseHas('logs', [
+            'log_type' => 'create',
+            'user_id' => $user->id,
+            'table_name' => 'posts'
+        ]);
+
+        $logs = $newPost->logs();
+        $this->assertCount(1, $logs);
+    }
 }
