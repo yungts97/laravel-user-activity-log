@@ -2,9 +2,10 @@
 
 namespace Yungts97\LaravelUserActivityLog\Traits;
 
+use Yungts97\LaravelUserActivityLog\Models\Log;
 use Yungts97\LaravelUserActivityLog\Events\CreatedModel;
-use Yungts97\LaravelUserActivityLog\Events\UpdatedModel;
 use Yungts97\LaravelUserActivityLog\Events\DeletedModel;
+use Yungts97\LaravelUserActivityLog\Events\UpdatedModel;
 
 trait Loggable
 {
@@ -15,5 +16,10 @@ trait Loggable
             'updated' => UpdatedModel::class,
             'deleted' => DeletedModel::class,
         ];
+    }
+
+    public function logs()
+    {
+        return Log::where('data->id', $this->id)->get();
     }
 }
