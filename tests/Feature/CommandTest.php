@@ -12,7 +12,7 @@ class CommandTest extends TestCase
     function it_can_delete_logs_via_command_with_day_option()
     {
         $before8Days = Date('Y-m-d H:i:s', strtotime('-8 days'));
-        
+
         Log::factory(3)->state(['log_datetime' => $before8Days])->create();
         Log::factory(2)->state(['log_datetime' => Date('Y-m-d H:i:s')])->create();
         $this->assertCount(5, Log::all());
@@ -62,7 +62,7 @@ class CommandTest extends TestCase
         //without option
         //default before 7 day  
         $before8Days = Date('Y-m-d H:i:s', strtotime('-8 days'));
-        
+
         Log::factory(3)->state(['log_datetime' => $before8Days])->create();
         Log::factory(2)->state(['log_datetime' => Date('Y-m-d H:i:s')])->create();
         $this->assertCount(5, Log::all());
@@ -79,7 +79,7 @@ class CommandTest extends TestCase
 
         $this->artisan('user-activity-log:clean --year=999')
             ->expectsOutput('Invalid option value! [year]. Year must be 1950 - 2200');
-            
+
         $this->artisan('user-activity-log:clean --month=10-2022')
             ->expectsOutput('Invalid option value! [month]. Month must in mm/yyyy format');
 
@@ -95,7 +95,7 @@ class CommandTest extends TestCase
     {
         $this->seed([LogSeeder::class]);
         $this->assertCount(5, Log::all());
-        
+
         $this->artisan('user-activity-log:flush')->expectsConfirmation('Do you wish to continue?', 'yes');
         $this->assertCount(0, Log::all());
     }

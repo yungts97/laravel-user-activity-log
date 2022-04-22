@@ -51,13 +51,13 @@ class UserActivityLogCleanup extends Command
             'date' => $this->option('date'),
         ];
         
-        $valuedOptions = filter_empty($options); 
+        $valuedOptions = filter_empty($options);
         if (count($valuedOptions) > 1)
             // should be only one option in the array, if not then return error.
             return $this->error('Too many options! You only able to have 1 option [day, month, year, date].');
 
         [$key, $value] = get_key_and_value($valuedOptions);
-        if (!$this->validateOptions($key, $value)) {
+        if (!$this->isValidOption($key, $value)) {
             $errorMessage = match ($key) {
                 'day' => 'Day be numeric value',
                 'month' => 'Month must in mm/yyyy format',
@@ -68,11 +68,11 @@ class UserActivityLogCleanup extends Command
         }
         return $this->deleteLog($key, $value);
     }
-            
+
     /**
      *  This function is used to validate the options.
      */
-    protected function validateOptions(?string $key, ?string $value)
+    protected function isValidOption(?string $key, ?string $value)
     {
         if (!$key) return true;
         else if ($key === 'day') return is_numeric($value);
@@ -87,11 +87,11 @@ class UserActivityLogCleanup extends Command
     protected function deleteLog(?string $key, ?string $value)
     {
         $log = new Log();
-        $log = match($key){
+        $log = match ($key) {
             'year' => $log->whereYear('log_datetime', $value),
             'date' => $log->whereDate('log_datetime', toYmd($value)),
             'month' => $log->whereMonthYear($value),
-            default => $log->whereRaw($this->prepareQueryForDay($value ?? 7)),
+            default => $log->whereRaw($this->prepareQueryForDay($value ?? 7)), // day (default by 7 days old once no option applied)
         };
         $affected = $log->delete();
         $this->info("Deleted logs: $affected");
