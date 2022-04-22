@@ -251,10 +251,10 @@ Exp. `http://example.com/api/logs?page=1&itemsPerPage=10&userId=517`
 
 | Option                   | Value        | Example                | Description                                        |
 | ------------------------ | -------------| ---------------------- | -------------------------------------------------- |
-| `--day` or `-d`          | numeric      | `--day=7`              | Delete user activity log older than N days.        |
-| `--month` or `-m`        | mm/yyyy      | `--month=01/2022`      | Delete user activity logs for a month of the year. |
-| `--year` or `-y`         | yyyy         | `--year=2022`          | Delete user activity logs for a year.              |
-| `--date` or `-D`         | yyyy         | `--date=15/02/2022`    | Delete user activity logs for a specific date.     |
+| `--day`                  | numeric      | `--day=7`              | Delete user activity log older than N days.        |
+| `--month`                | mm/yyyy      | `--month=01/2022`      | Delete user activity logs for a month of the year. |
+| `--year`                 | yyyy         | `--year=2022`          | Delete user activity logs for a year.              |
+| `--date`                 | yyyy         | `--date=15/02/2022`    | Delete user activity logs for a specific date.     |
 
 `⚠️ Notice:` Without any option applied by default is `--day=7`
 ## 📃 License
