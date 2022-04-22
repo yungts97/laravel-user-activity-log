@@ -17,12 +17,12 @@
 
 `yungts97/laravel-user-activity-log` is a package for Laravel 8.x that provides easy to use features to log the activities of the users of your Laravel app. It provides automatic logging for the model events without complicated action. All activity will be stored in the `logs` table. 
 
-## Environment Requirements
+## 📦 Environment Requirements
 `PHP`: ^8.0
 
-`Laravel`: ^8.x
+`Laravel`: ^8.x - ^9.0
 
-## Installation
+## 🚀 Installation
 You can install the package via composer:
 ```bash
 composer require yungts97/laravel-user-activity-log
@@ -35,7 +35,7 @@ After that, we still need one more step to complete the installation by run this
 php artisan user-activity-log:install
 ```
 
-## How to use?
+## ✨ How to use?
 This package is very simple and easy to use. The only thing you need to do is add the `Loggable` trait in your model class.
 ```php
 use Illuminate\Database\Eloquent\Model;
@@ -93,7 +93,12 @@ You can retrieve all activity using the `Yungts97\LaravelUserActivityLog\Models\
 Log::all();
 ```
 
-## Configuration
+However, you can get activity logs from a model by using this.
+```php
+$post->logs();
+```
+
+## ⚙️ Configuration
 You can change the configuration of this package on `config/user-activity-log.php`.
 ```php
 return [
@@ -126,10 +131,10 @@ return [
 ];
 ```
 
-## API Routes
-| Endpoint              | Method  | Response Format | Description                                     |
-| --------------------- | ------- | --------------- | ----------------------------------------------- | 
-| `/logs`               | `GET`   | JSON            | To retrieve user activity logs.                 |
+## 🐣 API Routes
+| Endpoint               | Method  | Response Format | Description                                     |
+| ---------------------- | ------- | --------------- | ----------------------------------------------- | 
+| `/logs`                | `GET`   | JSON            | To retrieve user activity logs.                 |
 | `/logs/filter-options` | `GET`   | JSON            | To retrieve filter options for filtering logs.  |
 | `/logs/{log_id}`       | `GET   `| JSON            | To retrieve specific activity log.              |
 
@@ -147,7 +152,7 @@ Available paramaters for log filtering:
 
 Exp. `http://example.com/api/logs?page=1&itemsPerPage=10&userId=517`
 
-### Sample Response
+### 📬 Sample Response
 `/logs`
 ```json
 {
@@ -234,6 +239,24 @@ Exp. `http://example.com/api/logs?page=1&itemsPerPage=10&userId=517`
     }
 },
 ```
-## License
+
+## 🎩 Artisan Commands
+| Command                   | Description                                                          | Option |
+| ------------------------- | -------------------------------------------------------------------- | ------ |
+| user-activity-log:install | Preparing all the files it needed for the user activity log package. | N\A    |
+| user-activity-log:flush   | Remove all the user activity log records that in the database.       | N\A    |                     
+| user-activity-log:clean   | Remove the user activity log records that in the database.           | `--day`, `--month`, `--year`, `--date` |
+
+### ✒️ Options for `user-activity-log:clean`
+
+| Option                   | Value        | Example                | Description                                        |
+| ------------------------ | -------------| ---------------------- | -------------------------------------------------- |
+| `--day` or `-d`          | numeric      | `--day=7`              | Delete user activity log older than N days.        |
+| `--month` or `-m`        | mm/yyyy      | `--month=01/2022`      | Delete user activity logs for a month of the year. |
+| `--year` or `-y`         | yyyy         | `--year=2022`          | Delete user activity logs for a year.              |
+| `--date` or `-D`         | yyyy         | `--date=15/02/2022`    | Delete user activity logs for a specific date.     |
+
+`⚠️ Notice:` Without any option applied by default is `--day=7`
+## 📃 License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
