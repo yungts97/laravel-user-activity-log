@@ -105,7 +105,7 @@ return [
     # add your own middleware here (route middleware)
     'middleware' => ['api', 'auth'],
 
-    # user model
+    # user model class
     'user_model' =>  "App\Models\User",
 
     # exclude tables for filter option
@@ -126,7 +126,9 @@ return [
         'logout' => true
     ],
 
-    # timezone for log date time
+    # timezone for log date time (Change to your region time zone)
+    # UTC is always the time zone being recorded.
+    # define your timezone to have the accurate logs time and filtered record (Especially filtered by date time)
     'timezone' => 'UTC'
 ];
 ```
@@ -243,8 +245,8 @@ Exp. `http://example.com/api/logs?page=1&itemsPerPage=10&userId=517`
 ## 🎩 Artisan Commands
 | Command                   | Description                                                          | Option |
 | ------------------------- | -------------------------------------------------------------------- | ------ |
-| user-activity-log:install | Preparing all the files it needed for the user activity log package. | N\A    |
-| user-activity-log:flush   | Remove all the user activity log records that in the database.       | N\A    |                     
+| user-activity-log:install | Preparing all the files it needed for the user activity log package. | N/A    |
+| user-activity-log:flush   | Remove all the user activity log records that in the database.       | N/A    |                     
 | user-activity-log:clean   | Remove the user activity log records that in the database.           | `--day`, `--month`, `--year`, `--date` |
 
 ### ✒️ Options for `user-activity-log:clean`
