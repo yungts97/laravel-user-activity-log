@@ -135,5 +135,7 @@ class UserActivityLogTest extends TestCase
 
         $logs = $newPost->logs();
         $this->assertCount(1, $logs);
+        
+        $this->assertEquals($newPost->toArray(), $logs[0]->data);
     }
 }
