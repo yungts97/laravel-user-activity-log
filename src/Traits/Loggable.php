@@ -20,6 +20,9 @@ trait Loggable
 
     public function logs()
     {
-        return Log::where('data->id', $this->id)->get();
+        return Log::where([
+            ['table_name', $this->getTable()],
+            ['data->id', $this->id]
+        ])->get();
     }
 }
