@@ -13,7 +13,7 @@ trait HasData
 
         $mode = config("user-activity-log.mode", 'simple');
         return $this->event_name === 'edit' && $mode === 'simple' ?
-            Arr::except([...$this->event->model->getChanges(), 'id' => $this->event->model->id], $this->event->model->log_hidden ?? []) :
+            Arr::except(array_merge($this->event->model->getChanges(), ['id' => $this->event->model->id]), $this->event->model->log_hidden ?? []) :
             Arr::except($this->event->model->getRawOriginal(), $this->event->model->log_hidden ?? []);
     }
 }

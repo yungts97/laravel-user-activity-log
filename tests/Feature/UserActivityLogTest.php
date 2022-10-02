@@ -190,7 +190,7 @@ class UserActivityLogTest extends TestCase
 
         //since the latest log is edit type, so just simply use latest log to test
         $actualLogData = $newPost->log->data;
-        $expectedLogData = [...$newPost->getChanges(), 'id' => $newPost->id];
+        $expectedLogData = array_merge($newPost->getChanges(), ['id' => $newPost->id]);
         $this->assertTrue($expectedLogData == $actualLogData);
     }
 
