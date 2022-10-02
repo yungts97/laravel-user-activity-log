@@ -8,8 +8,12 @@ trait HasData
 {
     protected function getData()
     {
-        return $this->event_name === 'create' ?
-            Arr::except($this->event->model->toArray(), $this->event->model->log_hidden ?? []) :
+        if ($this->event_name === 'create')
+            return Arr::except($this->event->model->toArray(), $this->event->model->log_hidden ?? []);
+
+        $mode = config("user-activity-log.mode", 'simple');
+        return $this->event_name === 'edit' && $mode === 'simple' ?
+            Arr::except([...$this->event->model->getChanges(), 'id' => $this->event->model->id], $this->event->model->log_hidden ?? []) :
             Arr::except($this->event->model->getRawOriginal(), $this->event->model->log_hidden ?? []);
     }
 }

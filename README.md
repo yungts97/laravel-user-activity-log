@@ -95,7 +95,18 @@ Log::all();
 
 However, you can get activity logs from a model by using this.
 ```php
-$post->logs();
+$post->logs; // get all model's logs
+$post->log; // get the latest model's log
+$post->logs()->where('log_type', 'edit')->get(); // get filtered logs
+```
+
+You allowed to specify the mode for the `edit` event log. There are two modes available now `simple`/`full`. The default mode is `full`.
+```php
+# config/user-activity-log.php
+
+# only can choose either one of them
+'mode' => 'full',   # the 'full' mode record everything
+'mode' => 'simple', # the 'simple' mode only record the modified columns
 ```
 
 ## ⚙️ Configuration
@@ -122,9 +133,16 @@ return [
         'create' => true,
         'edit'   => true,
         'delete' => true,
+        'retrieve' => false,
         'login'  => true,
         'logout' => true
     ],
+
+    # the mode is only for 'edit' event log
+    # the 'simple' mode only record the modified columns
+    # the 'full' mode record everything
+    # supported mode => 'simple' / 'full'
+    'mode' => 'full',
 
     # timezone for log date time (Change to your region time zone)
     # UTC is always the time zone being recorded.

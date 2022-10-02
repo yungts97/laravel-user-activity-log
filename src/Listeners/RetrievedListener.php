@@ -2,10 +2,10 @@
 
 namespace Yungts97\LaravelUserActivityLog\Listeners;
 
-class UpdatedListener extends ModelListener
+class RetrievedListener extends ModelListener
 {
     public function __construct()
     {
-        parent::__construct("edit");
+        parent::__construct("retrieve");
     }
 }

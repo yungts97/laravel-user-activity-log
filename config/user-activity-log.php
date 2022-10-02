@@ -20,9 +20,16 @@ return [
         'create' => true,
         'edit'   => true,
         'delete' => true,
+        'retrieve' => false,
         'login'  => true,
         'logout' => true
     ],
+
+    # the mode is only for 'edit' event log
+    # the 'simple' mode only record the modified columns
+    # the 'full' mode record everything
+    # supported mode => 'simple' / 'full'
+    'mode' => 'full',
 
     # timezone for log date time (Change to your region time zone)
     # UTC is always the time zone being recorded.

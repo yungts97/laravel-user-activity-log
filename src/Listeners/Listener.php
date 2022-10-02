@@ -3,6 +3,7 @@
 namespace Yungts97\LaravelUserActivityLog\Listeners;
 
 use Yungts97\LaravelUserActivityLog\Models\Log;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class Listener
 {
@@ -29,6 +30,7 @@ class Listener
             'ip'         => request()->ip(),
             'user_agent' => request()->userAgent()
         ];
+
         // insert log record
         Log::create([
             'user_id'       => auth()?->user()?->id,
@@ -42,6 +44,9 @@ class Listener
 
     protected function isLoggable()
     {
+        // always skip retrieve event for authenticatable model. Exp. App\Models\User
+        if ($this->isRetrieveAuthenticatableModel()) return false;
+
         return config("user-activity-log.events.{$this->event_name}", false);
     }
 
@@ -53,5 +58,12 @@ class Listener
     protected function getData()
     {
         return null;
+    }
+
+    private function isRetrieveAuthenticatableModel()
+    {
+        return
+            $this->event_name === 'retrieve' &&
+            $this->event?->model instanceof Authenticatable;
     }
 }
