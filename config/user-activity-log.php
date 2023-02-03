@@ -31,8 +31,8 @@ return [
     # supported mode => 'simple' / 'full'
     'mode' => 'full',
 
-    # timezone for log date time (Change to your region time zone)
-    # UTC is always the time zone being recorded.
+    # timezone for log date time (Change to your region time zone, or any other variation of the timezone key in .env)
+    # UTC is the default the time zone being recorded.
     # define your timezone to have the accurate logs time and filtered record (Especially filtered by date time)
-    'timezone' => 'UTC'
+    'timezone' => env('APP_TIMEZONE','UTC')
 ];
