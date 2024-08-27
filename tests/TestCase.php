@@ -7,6 +7,7 @@ use Illuminate\Encryption\Encrypter;
 use Illuminate\Database\Schema\Blueprint;
 use Yungts97\LaravelUserActivityLog\Tests\Models\User;
 use Yungts97\LaravelUserActivityLog\Tests\Database\Seeders\UserSeeder;
+use Yungts97\LaravelUserActivityLog\Tests\Database\Seeders\AdminSeeder;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
@@ -43,10 +44,11 @@ class TestCase extends \Orchestra\Testbench\TestCase
     {
         $this->migrateActivityLogTable();
 
-        $this->createTables('users', 'posts');
+        $this->createTables('users', 'admins', 'posts');
         
         $this->seed([
             UserSeeder::class,
+            AdminSeeder::class,
         ]);
     }
 
@@ -70,6 +72,8 @@ class TestCase extends \Orchestra\Testbench\TestCase
                 if ($tableName === 'posts') {
                     $table->integer('user_id')->unsigned()->nullable();
                     $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+                    $table->integer('admin_id')->unsigned()->nullable();
+                    $table->foreign('admin_id')->references('id')->on('admins')->onDelete('cascade');
                 }
             });
         });

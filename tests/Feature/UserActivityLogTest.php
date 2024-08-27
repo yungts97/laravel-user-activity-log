@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Yungts97\LaravelUserActivityLog\Tests\TestCase;
 use Yungts97\LaravelUserActivityLog\Tests\Models\Post;
 use Yungts97\LaravelUserActivityLog\Tests\Models\User;
+use Yungts97\LaravelUserActivityLog\Tests\Models\Admin;
 use Yungts97\LaravelUserActivityLog\Tests\Models\PostWithHidden;
 use Yungts97\LaravelUserActivityLog\Tests\Models\PostWithoutLog;
 
@@ -222,5 +223,40 @@ class UserActivityLogTest extends TestCase
         //since the latest log is edit type, so just simply use latest log to test
         $actualLogData = $newPost->log->data;
         $this->assertTrue($expectedLogData == $actualLogData);
+    }
+
+    /** @test */
+    function it_can_skip_logging_for_not_loggable_authenticable_model()
+    {
+        //admin login
+        config()->set('auth.providers.users.model', Admin::class);
+        $admin = Admin::first();
+        Auth::login($admin);
+
+        //create a post
+        $newPost = new Post(['name' => 'Post 1']);
+        $admin->posts()->save($newPost);
+
+        //checking database have the activity log record
+        $this->assertDatabaseMissing('logs', [
+            'log_type' => 'create',
+            'admin_id' => $admin->id,
+            'table_name' => 'posts'
+        ]);
+    }
+
+    /** @test */
+    function it_can_skip_logging_on_no_logged_in_user()
+    {
+        //create a post
+        $newPost = new Post(['name' => 'Post 1']);
+        $newPost->save();
+
+        //checking database have the activity log record
+        $this->assertDatabaseMissing('logs', [
+            'log_type' => 'create',
+            'user_id' => null,
+            'table_name' => 'posts'
+        ]);
     }
 }

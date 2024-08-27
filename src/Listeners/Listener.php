@@ -47,6 +47,9 @@ class Listener
         // always skip retrieve event for authenticatable model. Exp. App\Models\User
         if ($this->isRetrieveAuthenticatableModel()) return false;
 
+        // skip if authenticable model is not loggable
+        if ($this->isNotLoggableAuthenticatableModel()) return false;
+        
         return config("user-activity-log.events.{$this->event_name}", false);
     }
 
@@ -65,5 +68,23 @@ class Listener
         return
             $this->event_name === 'retrieve' &&
             $this->event?->model instanceof Authenticatable;
+    }
+
+    private function isNotLoggableAuthenticatableModel()
+    {
+        $this->useLoggeduserAuthGuard();
+        if(is_null(auth()->user()))
+            return true;
+
+        return config('user-activity-log.user_model', '\App\Models\User') !== get_class(auth()?->user());
+    }
+
+    private function useLoggeduserAuthGuard()
+    {
+        foreach (config('auth.guards') as $key => $guard) {
+            if (auth()->guard($key)->check()) {
+                return auth()->shouldUse($key);
+            }
+        }
     }
 }

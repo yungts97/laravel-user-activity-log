@@ -2,7 +2,7 @@
 namespace Yungts97\LaravelUserActivityLog\Tests\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Yungts97\LaravelUserActivityLog\Tests\Database\Factories\UserFactory;
+use Yungts97\LaravelUserActivityLog\Tests\Database\Factories\PostFactory;
 
 class Post extends BaseModel
 {
@@ -21,6 +21,6 @@ class Post extends BaseModel
 
     protected static function newFactory()
     {
-        return UserFactory::new();
+        return PostFactory::new();
     }
 }
