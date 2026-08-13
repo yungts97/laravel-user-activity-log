@@ -2,6 +2,7 @@
 
 namespace Yungts97\LaravelUserActivityLog\Listeners;
 
+use Illuminate\Support\Facades\Auth;
 use Yungts97\LaravelUserActivityLog\Models\Log;
 use Illuminate\Contracts\Auth\Authenticatable;
 
@@ -33,7 +34,7 @@ class Listener
 
         // insert log record
         Log::create([
-            'user_id'       => auth()?->user()?->id,
+            'user_id'       => Auth::id(),
             'log_datetime'  => date('Y-m-d H:i:s'),
             'log_type'      => $this->event_name,
             'table_name'    => $this->getTableName(),
